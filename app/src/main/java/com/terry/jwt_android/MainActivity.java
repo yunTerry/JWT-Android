@@ -7,6 +7,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.auth0.android.jwt.JWT;
+import com.google.gson.GsonBuilder;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,7 +57,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_login:
+                String name = et_name.getText().toString();
+                String pwd = et_pwd.getText().toString();
+                Rest.getRestApi().login(name, pwd)
+                        .enqueue(new BaseBack<String>() {
+                            @Override
+                            protected void onSuccess(String jwt) {
+                                login_ll.setVisibility(View.GONE);
+                                getUserInfo(jwt);
+                            }
+
+                            @Override
+                            protected void onFailed(int code, String msg) {
+                                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                            }
+                        });
                 break;
         }
     }
+
+    private void getUserInfo(String token) {
+        JWT jwt = new JWT(token);
+        tv_jwt.setText("jwt:\n" + token +
+                "\n\nuserid:\n" + jwt.getSubject() +
+                "\nrole:" + jwt.getClaim("role").asString());
+        Rest.getRestApi().getUser(token)
+                .enqueue(new BaseBack<User>() {
+                    @Override
+                    protected void onSuccess(User user) {
+                        String json = new GsonBuilder().setPrettyPrinting()
+                                .disableHtmlEscaping().create().toJson(user);
+                        tv_user.setText("userinfo:\n" + json);
+                    }
+
+                    @Override
+                    protected void onFailed(int code, String msg) {
+                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 }

@@ -2,6 +2,7 @@ package com.terry.jwt_android;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -16,11 +17,12 @@ import retrofit2.http.POST;
 
 public interface RestAPI {
 
-    @POST("/login")
+    @POST("login")
+    @FormUrlEncoded
     Call<BaseModel<String>> login(@Field("name") String name,
                                   @Field("pwd") String pwd);
 
-    @GET("/user")
+    @GET("user")
     Call<BaseModel<User>> getUser(@Header("jwt") String token);
 
 }

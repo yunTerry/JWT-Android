@@ -1,6 +1,7 @@
 package com.terry.jwt_android;
 
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * *
@@ -17,7 +18,8 @@ public class Rest {
     public static RestAPI getRestApi() {
         if (restAPI == null) {
             restAPI = new Retrofit.Builder()
-                    .baseUrl("http://10.45.54.128:2017")
+                    .baseUrl("http://10.45.54.128:3000/")
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build()
                     .create(RestAPI.class);
         }
