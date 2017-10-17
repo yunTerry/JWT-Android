@@ -15,11 +15,11 @@ Call<BaseModel<String>> login(@Field("name") String name,
 Call<BaseModel<User>> getUser(@Header("jwt") String token);
 ```
 
-+ 登录接口提交用户名密码，服务端返回jwt令牌：
++ 登录接口：客户端提交用户名密码，服务端返回JWT令牌：
 
 ![](img/1.jpg)
 
-+ 客户端将token放在请求头，服务端校验通过即返回用户信息
++ 用户信息接口：客户端将token放在请求头，服务端校验通过即返回用户信息
 
 + 客户端在本地存储token以后就能免登陆
 
